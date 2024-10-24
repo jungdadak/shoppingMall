@@ -1,19 +1,20 @@
 import mongoose from 'mongoose';
 import Product from './Product.js';
-import Cart from './Cart.js';
 import User from './User.js';
 
 const Schema = mongoose.Schema;
 const orderSchema = Schema({
-  shipTo: { type: String, required: true },
-  contact: { type: String, required: true },
+  shipTo: { type: Object, required: true },
+  contact: { type: Object, required: true },
   userId: { type: mongoose.ObjectID, ref: User },
+  status: { type: String, default: 'not yet' },
+  orderID: { type: String },
   items: [
     {
-      productId: { type: mongoose.ObjectID, ref: Product },
-      size: { type: mongoose.Cart, ref: Cart },
-      quantity: { type: mongoose.Cart, ref: Cart },
-      price: { type: Number, required: true }, //주문시 가격이 바뀔 수 있기에 필요
+      productId: { type: mongoose.ObjectId, ref: Product, required: true },
+      price: { type: Number, required: true },
+      qty: { type: Number, required: true, default: 1 },
+      size: { type: String, required: true },
     },
   ],
 });
