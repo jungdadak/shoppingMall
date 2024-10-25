@@ -9,8 +9,8 @@ userController.createUser = async (req, res) => {
     if (user) {
       throw new Error('User already exists');
     }
-    const salt = await bcrypt.genSalt(10); //소금 열번
-    password = await bcrypt.hash(password, salt); //소금 챡챡
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
     const newUser = new User({
       email,
       password,
@@ -18,8 +18,9 @@ userController.createUser = async (req, res) => {
       level: level ? level : 'customer',
     });
     await newUser.save();
-    return res.status(200).json({ status: 'success', message: '환영하오' });
+    return res.status(201).json({ status: 'success', message: '환영합니다!' });
   } catch (error) {
+    console.error('Error in createUser:', error);
     res.status(400).json({ status: 'fail', error: error.message });
   }
 };

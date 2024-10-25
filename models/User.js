@@ -24,7 +24,7 @@ userSchema.methods.toJSON = function () {
 }; // userSchema 가 호출시 default 로 실행됨. 백엔드에서 불필요데이터 차단
 
 userSchema.methods.generateToken = async function () {
-  const token = await jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY, {
+  const token = await jwt.sign({ _id: this._id }, JWT_SECRET_KEY, {
     expiresIn: '1d',
   });
   return token;
