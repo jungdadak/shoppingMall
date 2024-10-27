@@ -32,10 +32,22 @@ authController.authenticate = async (req, res, next) => {
 		const token = tokenString.replace("Bearer ", "");
 		jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
 			if (error) {
-				throw new Error("유효하지 않은 세션입니다.");
+				throw new Error("유효하지 않은 토큰입니다.");
 			}
 			req.userId = payload._id;
 		});
+		next();
+	} catch (error) {
+		res.status(400).json({ status: "fail", error: error.message });
+	}
+};
+authController.checkAdminPermission = async (req, res, next) => {
+	try {
+		const { userId } = req;
+		const user = await User.findById(userId);
+		if (user.level !== "admin") {
+			throw new Error("관리자 권한이 필요합니다.");
+		}
 		next();
 	} catch (error) {
 		res.status(400).json({ status: "fail", error: error.message });
