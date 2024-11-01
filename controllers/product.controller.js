@@ -45,4 +45,37 @@ productController.getProducts = async (req, res) => {
 		res.status(400).json({ status: "fail", err: err.message });
 	}
 };
+
+productController.updateProduct = async (req, res) => {
+	try {
+		const productId = req.params.id;
+		const { sku, stock, status, name, price, description, category, image } =
+			req.body;
+		const product = await Product.findByIdAndUpdate(
+			{ _id: productId },
+			{ sku, stock, status, name, price, description, category, image },
+			{ new: true }
+		);
+		if (!product) {
+			throw new Error("Product not found");
+		}
+		res.status(200).json({ status: "success", product });
+	} catch (err) {
+		res.status(400).json({ status: "fail", err: err.message });
+	}
+};
+
+productController.getProductById = async (req, res) => {
+	try {
+		const productId = req.params.id;
+		const product = await Product.findById(productId);
+		if (!product) {
+			throw new Error("Product not found");
+		}
+		res.status(200).json({ status: "success", product });
+	} catch (err) {
+		res.status(400).json({ status: "fail", err: err.message });
+	}
+};
+
 export default productController;
